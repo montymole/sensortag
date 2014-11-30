@@ -1,0 +1,28 @@
+{>"layout.dust"/}
+
+{<bodyContent}
+
+	<table>
+
+	<tr>
+		<th>ID</th>
+		<th>TIME</th>
+		<th>Readning</th>
+		<th>Value</th>
+	</tr>
+
+	{#IRTemperatureData}
+
+		<tr>
+			<td>{sensorTagId}</td>
+			<td>{{dateStr}</td>
+			<td>{cname}</td>
+			<td>{value.objectTemp}
+
+			</td>
+
+		</tr>
+	{/IRTemperatureData}
+	</table>
+
+{/bodyContent}
