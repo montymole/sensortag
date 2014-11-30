@@ -2,6 +2,11 @@
 
 {<bodyContent}
 
+	<div id="graph"></div>
+	<script type="text/javascript">
+	var model = {raw|s};
+	</script>
+
 	<table>
 
 	<tr>

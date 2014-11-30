@@ -31,15 +31,15 @@ app.get('/', function(req, res) {
     var now = new Date(),
         dstart = new Date();
 
-    dstart.setHours(now.getHours() - 1);
-
+    dstart.setHours(now.getHours() - 10);
 
     readingsDateFromTo(dstart.getTime(), now.getTime(), function(readings) {
 
-        var model = {},r,n;
+        var model = {},
+            r, n;
 
         //process readings abit
-        while(readings.length) {
+        while (readings.length) {
             r = readings.shift();
             n = r.cname.split(' ').join(''); //camelcase the names
             if (!model[n]) {
@@ -50,7 +50,8 @@ app.get('/', function(req, res) {
             model[n].push(r);
         }
 
-        console.log(model);
+
+        model.raw = JSON.stringify(model);
 
         dust.render('index.dust', model, function(err, output) {
 
@@ -59,6 +60,37 @@ app.get('/', function(req, res) {
         });
 
     });
+
+});
+
+app.get('/ajax', function(req, res) {
+
+    var now = new Date(),
+        dstart = new Date();
+
+    dstart.setHours(now.getHours() - 10);
+
+    readingsDateFromTo(dstart.getTime(), now.getTime(), function(readings) {
+
+        var model = {},
+            r, n;
+
+        //process readings abit
+        while (readings.length) {
+            r = readings.shift();
+            n = r.cname.split(' ').join(''); //camelcase the names
+            if (!model[n]) {
+                model[n] = [];
+            }
+            r.dateStr = new Date();
+            r.dateStr.setTime(r.date);
+            model[n].push(r);
+        }
+
+        res.send(model);
+
+    });
+
 
 });
 
