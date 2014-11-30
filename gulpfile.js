@@ -32,12 +32,8 @@ var UGLIFY = true,
     pub_dir = path.join(__dirname, 'public'),
     src_dir = path.join(__dirname, 'src'),
 
-    //render site
-    site = require(src_dir + '/site.js'),
+    //render dust
     dust = require('dustjs-linkedin');
-
-//compiled templates
-require(src_dir + '/js/dust.tpl.js');
 
 
 /*--------------------------------------*/

@@ -17,7 +17,7 @@
 
       {+pageHeader /}
 
-      {+bodyContent}{/bodyContent}
+      {+bodyContent /}
 
 {^pushstate}
   </div>
