@@ -1,5 +1,4 @@
-
-    TIBase = ['f000', '04514000b000000000000000'],
+var TIBase = ['f000', '04514000b000000000000000'],
 
     //based on http://processors.wiki.ti.com/images/a/a8/BLE_SensorTag_GATT_Server.pdf
     sensorTagAttributeTable = {
@@ -22,35 +21,42 @@
 
         AA10: ['Accelerometer Service'],
         AA11: ['Accelerometer Data', 'X: Y: Z Coordinates'],
-        AA12: ['Accelerometer Config', 'Write"01"to selectrange2G,"02" for 4G, "03"for8G,"00" disable sensor'],
-        AA13: ['Accelerometer Period', 'Period =[Input*10]ms,(lowerlimit 100ms),default1000ms'],
+        AA12: ['Accelerometer Config', 'Write "01" to select range 2G, "02" for 4G, "03" for 8G, "00" disable sensor'],
+        AA13: ['Accelerometer Period', 'Period = [Input*10]ms, (lowerlimit 100ms), default1000ms'],
 
         AA20: ['Humidity Service'],
         AA21: ['Humidity Data', 'TempLSB:TempMSB:HumidityLSB:HumidityMSB'],
         AA22: ['Humidity Config', 'Write"01"to startmeasurements, "00"tostop'],
-        AA23: ['Humidity Preioid', 'Period =[Input*10]ms,(lowerlimit 100 ms),default1000 ms'],
+        AA23: ['Humidity Period', 'Period =[Input*10]ms,(lowerlimit 100 ms),default1000 ms'],
 
         AA30: ['Magnetometer Service'],
         AA31: ['Magnetometer Data', 'XLSB:XMSB:YLSB:YMSB:ZLSB:ZMSBCoordinates'],
-        AA32: ['Magnetometer Config', 'Write"01"to startSensorandMeasurements,"00"toputto sleep'],
-        AA33: ['Magnetometer Period', 'Period =[Input*10]ms(lower limit100ms),default 2000ms'],
+        AA32: ['Magnetometer Config', 'Write "01" to start Sensor and Measurements, "00" to put to sleep'],
+        AA33: ['Magnetometer Period', 'Period =[Input*10]ms (lower limit100ms) ,default 2000ms'],
 
         AA40: ['Barometer Service'],
         AA41: ['Barometer Data', 'TempLSB:TempMSB:PressureLSB:PressureMSB'],
-        AA42: ['Barometer Configuration', 'Write"01"to startSensorandMeasurements,"00"toputto sleep, "02"to readcalibrationvaluesfrom sensor'],
+        AA42: ['Barometer Config', 'Write "01" to start Sensor and Measurements , "00" to put to sleep, "02" to read calibration values from sensor'],
         AA44: ['Barometer Period', 'Period =[Input*10]ms,(lowerlimit 100 ms),default1000 ms'],
-        AA43: ['Barometer Calibration', 'Whenwrite"02"toBarometer conf.hasbeen issued,the calibrationvaluesisfoundhere.'],
+        AA43: ['Barometer Calibration', 'When write "02" to Barometer conf. ha sbeen issued,the calibration values is found here.'],
 
         AA50: ['Gyroscope Service'],
         AA51: ['Gyroscope Data', 'XLSB:XMSB:YLSB:YMSB:ZLSB:ZMSB'],
-        AA52: ['Gyroscope Config', 'Write0toturnoffgyroscope,1to enableXaxisonly,2to enable Yaxis only,3=X andY,4= Zonly,5=X and Z,6=Y'],
+        AA52: ['Gyroscope Config', 'Write 0 to turn off gyroscope,1 to enable X-axis only, 2t o enable Y-axis only, 3=X and Y,4 = Zo nly, 5 = X and Z, 6 = Y'],
         AA53: ['Gyroscope Period', 'Period =[Input*10]ms(lower limit100ms),default 1000ms'],
+    
         AA61: ['TestData', 'Self-test results (highbitindicatesPASSED):Bit 0:IRtemp,1:Humidity,2:Magnetometer,3:accelerometer,4:Barometer,5:Gyroscope'],
+    
         AA62: ['Test Config', 'bit 7: enable testmode; bit 0-1LED bit mask'],
+    
         CCC1: ['Connection Parameters', 'ConnInterval,SlaveLatency,SupervisionTimeout(2 byteseach)'],
+    
         CCC2: ['Request Connection Parameters', 'MinConnInterval,MaxConnInterval,SlaveLatency,SupervisionTimeout(2 byteseach)'],
+    
         CCC3: ['Disconnect request', 'Change thevaluetodisconnect'],
+    
         FFC1: ['OADImage Identify', 'Write "0" to identify image type "A", "1" to identify "B". Data in notification 8 bytes: imagetype(2), size/4(2),userdata(4).'],
+    
         FFC2: ['OADImage Block', 'Imageblock(18bytes).Blockno. (2 bytes),OADimage block (16 bytes)'],
 
         FFE0: ['Keypress service'],
@@ -68,6 +74,11 @@ function getTiAttribute(uuid) {
 
 }
 
+function MSBLSBtoWORD(msb, lsb) {
+
+    return (((msb << 8) | lsb) << 16) >> 16;
+}
+
 function SensorTag(p, cb) {
 
     this.p = p;
@@ -78,6 +89,9 @@ function SensorTag(p, cb) {
     this.init(p, cb);
 
 }
+
+
+
 
 SensorTag.prototype = {
 
@@ -128,15 +142,16 @@ SensorTag.prototype = {
 
         if (tiAttr) {
 
+            //removeSpaces to make CamelCaseNames
             var fName = tiAttr[2].split(' ').join('');
 
             this[fName] = {
                 ch: ch,
                 info: tiAttr
-            }
+            };
 
         } else {
-            console.log('unknown charactersitc')
+            console.error('unknown charactersitc');
         }
 
     },
@@ -144,7 +159,7 @@ SensorTag.prototype = {
     readConfigHex: function(cname, cb) {
         var st = this;
         st[cname].ch.read(function(err, buf) {
-            cb(st, st[cname].info[2], err, buf.toString('hex'))
+            cb(st, st[cname].info[2], err, buf.toString('hex'));
         });
     },
 
@@ -164,6 +179,8 @@ SensorTag.prototype = {
         this.readConfigHex('FirmwareRevisionString', cb);
     },
 
+    ////////////////////////////////////////////////////////////////////////////////////
+
     getIRTemperatureConfig: function(cb) {
         this.readConfigHex('IRTemperatureConfig', cb);
     },
@@ -173,13 +190,18 @@ SensorTag.prototype = {
         this.IRTemperatureConfig.ch.write(onBit, true, cb);
     },
 
+    stopIRTemperature: function(cb) {
+        var offBit = new Buffer([0x00]);
+        this.IRTemperatureConfig.ch.write(offBit, true, cb);
+    },
+
     getIRTemperatureData: function(cb) {
         var st = this;
 
         st.IRTemperatureData.ch.read(function(err, data) {
 
-            var objT = (((data[1] << 8) | data[0]) << 16) >> 16,
-                ambT = (((data[3] << 8) | data[2]) << 16) >> 16,
+            var objT = MSBLSBtoWORD(data[1], data[0]),
+                ambT = MSBLSBtoWORD(data[3], data[2]),
                 m_tmpAmb = ambT / 128.0,
                 Vobj2 = objT * 0.00000015625,
                 Tdie2 = m_tmpAmb + 273.15,
@@ -194,16 +216,103 @@ SensorTag.prototype = {
                 S = S0 * (1 + a1 * (Tdie2 - Tref) + a2 * Math.pow((Tdie2 - Tref), 2)),
                 Vos = b0 + b1 * (Tdie2 - Tref) + b2 * Math.pow((Tdie2 - Tref), 2),
                 fObj = (Vobj2 - Vos) + c2 * Math.pow((Vobj2 - Vos), 2),
-                tObj = Math.pow(Math.pow(Tdie2, 4) + (fObj / S), .25);
+                tObj = Math.pow(Math.pow(Tdie2, 4) + (fObj / S), 0.25);
 
             tObj = (tObj - 273.15);
 
-            cb(st, st.IRTemperatureData.info[2], err, tObj);
+            var TObj = {
+                rawData : data,
+                objTempWORD: objT,
+                ambTempWORD: ambT,
+                objectTemp : tObj
+            };
 
+            cb(st, st.IRTemperatureData.info[2], err, TObj);
+
+        });
+    },
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    getHumidityConfig: function(cb) {
+        this.readConfigHex('HumidityConfig', cb);
+    },
+
+    startHumidity: function(cb) {
+        var onBit = new Buffer([0x01]);
+        this.HumidityConfig.ch.write(onBit, true, cb);
+    },
+
+    stopHumidity: function(cb) {
+        var offBit = new Buffer([0x00]);
+        this.HumidityConfig.ch.write(offBit, true, cb);
+    },
+
+    getHumidityData: function(cb) {
+        var st = this;
+
+        st.HumidityData.ch.read(function(err, data) {
+
+            var TempWORD = MSBLSBtoWORD(data[1], data[0]),
+                HumidityWORD = MSBLSBtoWORD(data[3], data[2]);
+
+            var HObj = {
+                rawData: data,
+                tempWORD: TempWORD,
+                humidityWORD: HumidityWORD
+            };
+
+            cb(st, st.HumidityData.info[2], err, HObj);
+
+
+        });
+    },
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    getBarometerConfig: function(cb) {
+        this.readConfigHex('BarometerConfig', cb);
+    },
+
+    startBarometer: function(cb) {
+        var onBit = new Buffer([0x01]);
+        this.BarometerConfig.ch.write(onBit, true, cb);
+    },
+
+    stopBarometer: function(cb) {
+        var offBit = new Buffer([0x00]);
+        this.BarometerConfig.ch.write(offBit, true, cb);
+    },
+
+    getBarometerCalibration: function(cb) {
+        var calibrationBit = new Buffer([0x02]),
+            st = this;
+        this.BarometerConfig.ch.write(calibrationBit, true, function() {
+            st.BarometerCalibration.ch.read(function(err, data) {
+
+                var CObj = {
+                    rawData: data
+                };
+                cb(st, st.BarometerCalibration.info[2], err, CObj);
+            });
+        });
+    },
+
+    getBarometerData: function(cb) {
+        var st = this;
+
+        st.BarometerData.ch.read(function(err, data) {
+
+            var BObj = {
+                rawData: data
+            };
+
+            cb(st, st.BarometerData.info[2], err, BObj);
         });
     }
 
-}
+
+};
 
 
 exports.SensorTag = SensorTag;

@@ -25,8 +25,22 @@ function startProbing(st) {
         st.getIRTemperatureConfig(outputValue);
     });
 
+    st.startHumidity(function() {
+        st.getHumidityConfig(outputValue);
+    });
+
+    st.getBarometerCalibration(function(st, cname, err, v) {
+        outputValue(st, cname, err, v);
+        st.startBarometer(function() {
+            st.getBarometerConfig(outputValue);
+        });
+    });
+
+
     function probe() {
         st.getIRTemperatureData(outputValue);
+        st.getHumidityData(outputValue);
+        st.getBarometerData(outputValue);
     }
 
     setInterval(probe, 5000);
