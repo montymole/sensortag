@@ -50,7 +50,6 @@ app.get('/', function(req, res) {
             model[n].push(r);
         }
 
-
         model.raw = JSON.stringify(model);
 
         dust.render('index.dust', model, function(err, output) {
@@ -68,7 +67,7 @@ app.get('/ajax', function(req, res) {
     var now = new Date(),
         dstart = new Date();
 
-    dstart.setHours(now.getHours() - 10);
+    dstart.setHours(now.getHours() - 100);
 
     readingsDateFromTo(dstart.getTime(), now.getTime(), function(readings) {
 

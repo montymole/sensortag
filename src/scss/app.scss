@@ -1,8 +1,38 @@
 @charset "UTF-8";
 @import "mixins";
 @import "normalize";
-
-#graph {
-	width:800px;
-	height:400px;
+$c2: #5fa;
+$m: 20px;
+$header-h: 100px;
+#app {
+    border: solid 20px #000;
+    #header {
+        position: relative;
+        background-color: $c2;
+        display: block;
+        height: $header-h;
+        border: solid 1px #000;
+        img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: $header-h;
+        }
+        h1 {
+        	font-size:$header-h - 2* $m;
+            margin: $m;
+        }
+    }
+    #content {
+        position: relative;
+    }
+    #graph {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        background-color: #ddd;
+    }
+    #footer {
+        background-color: #0b0;
+    }
 }

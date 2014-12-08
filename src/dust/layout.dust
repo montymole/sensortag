@@ -1,4 +1,3 @@
-{^pushstate}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:fb="http://ogp.me/ns/fb#">
@@ -13,15 +12,18 @@
 
   <body>
   <div id="app">
-{/pushstate}
 
-      {+pageHeader /}
+      <div id="header">
+        <h1>Green circuits</h1>
+        <img src="/svg/logo.svg"/>
+      </div>
 
+      <div id="content">
       {+bodyContent /}
-
-{^pushstate}
+      </div>
+      <div id="footer">FOOT</div>
   </div>
       <script type="text/javascript" src="/js/app.min.js"></script>
   </body>
 </html>
-{/pushstate}
+
