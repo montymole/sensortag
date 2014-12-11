@@ -6,6 +6,7 @@ var TIBase = ['f000', '04514000b000000000000000'],
         //TYPE(hex string): [TYPE(text), DESCRIPTION]
         "2A00": ['DeviceName', 'TI BLE Sensor Tag'],
         "2A01": ['Appearance'],
+        "2A02": ['Peripheral PrivacyFlag'],
         "2A23": ['System ID'],
         "2A24": ['Model Number String', '4E:2E:41:2E:00'],
         "2A25": ['Serial Number String','4E:2E:41:2E:00 '],
