@@ -1,6 +1,42 @@
 var noble = require('noble'),
+    mraa = require('mraa'), //edison hardware access
     SensorTag = require('./sensortag.js').SensorTag,
-    sensorTags = [];
+    sensorTags = [],
+
+    //onboard led write access
+    onboardLedState = true,
+    blinkedTimes = 0,
+    toBlink,
+    blinkDelay = 100,
+    onboardLed = new mraa.Gpio(13);
+
+onboardLed.dir(mraa.DIR_OUT); //output
+onboardLed.write(0); //start off
+
+function blinkLed(n, d) {
+
+    if (n) {
+        toBlink = n;
+    }
+
+    if (d) {
+        blinkDelay = d;
+    }
+
+    blinkedTimes++;
+
+    if (blinkedTimes < toBlink) {
+        onboardLedState = !onboardLedState;
+        onboardLed.write(onboardLedState ? 1 : 0);
+        setTimeout(blinkLed, blinkDelay);
+    } else {
+        blinkedTimes = 0;
+        onboardLed.write(0);
+    }
+
+
+}
+
 
 function outputValue(st, cname, err, v) {
     var t = new Date();
@@ -56,6 +92,8 @@ noble.on('discover', function(P) {
         var sensorTag = new SensorTag(P, startProbing);
         sensorTag.idx = sensorTags.length;
         sensorTags.push(sensorTag);
+        //blink on discover
+        blinkLed(2, 1000);
     }
 
 });
