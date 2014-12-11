@@ -9,6 +9,7 @@ var TIBase = ['f000', '04514000b000000000000000'],
         "2A02": ['Peripheral PrivacyFlag'],
         "2A03": ['Reconnection Address'],
         "2A04": ['Peripheral Preferred Connection Parameters'],
+        "2A05": ['Service Changed'],
         "2A23": ['System ID'],
         "2A24": ['Model Number String', '4E:2E:41:2E:00'],
         "2A25": ['Serial Number String','4E:2E:41:2E:00 '],
@@ -112,6 +113,7 @@ SensorTag.prototype = {
 
             } else {
                 p.updateRssi(function(error, rssi) {
+                    console.log('RSSI->', rssi, error);
                     st.rssi = rssi;
                 });
 
