@@ -8,6 +8,7 @@ var TIBase = ['f000', '04514000b000000000000000'],
         "2A01": ['Appearance'],
         "2A02": ['Peripheral PrivacyFlag'],
         "2A03": ['Reconnection Address'],
+        "2A04": ['Peripheral Preferred Connection Parameters'],
         "2A23": ['System ID'],
         "2A24": ['Model Number String', '4E:2E:41:2E:00'],
         "2A25": ['Serial Number String','4E:2E:41:2E:00 '],
@@ -144,10 +145,7 @@ SensorTag.prototype = {
 
         var tiAttr = getTiAttribute(ch.uuid);
 
-        if (tiAttr) {
-
-            console.log('ATTR->',tiAttr);
-
+        try {
             //removeSpaces to make CamelCaseNames
             var fName = tiAttr[2].split(' ').join('');
 
@@ -156,8 +154,8 @@ SensorTag.prototype = {
                 info: tiAttr
             };
 
-        } else {
-            console.error('unknown charactersitc');
+        } catch (err) {
+            console.error('unknown characterstic ', tiAttr, err);
         }
 
     },
