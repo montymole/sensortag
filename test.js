@@ -40,8 +40,8 @@ function blinkLed(n, d) {
 
 function outputValue(st, cname, err, v) {
     var t = new Date();
-    blinkLed(1, 500);
     console.log(t.getTime(), cname, v);
+    blinkLed(1, 100);
 }
 
 
