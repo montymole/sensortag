@@ -85,7 +85,7 @@ function SensorTag(p, cb) {
     this.p = p;
     this.rssi = 0;
 
-    //console.log(this.p.advertisement);
+    console.log('FOUND->',this.p.advertisement);
 
     this.init(p, cb);
 
@@ -142,6 +142,8 @@ SensorTag.prototype = {
         var tiAttr = getTiAttribute(ch.uuid);
 
         if (tiAttr) {
+
+            console.log('ATTR->',tiAttr);
 
             //removeSpaces to make CamelCaseNames
             var fName = tiAttr[2].split(' ').join('');
