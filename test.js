@@ -40,6 +40,7 @@ function blinkLed(n, d) {
 
 function outputValue(st, cname, err, v) {
     var t = new Date();
+    blinkLed(1, 500);
     console.log(t.getTime(), cname, v);
 }
 
@@ -74,6 +75,7 @@ function startProbing(st) {
 
 
     function probe() {
+        blinkLed(5, 500);
         st.getIRTemperatureData(outputValue);
         st.getHumidityData(outputValue);
         st.getBarometerData(outputValue);
@@ -93,10 +95,11 @@ noble.on('discover', function(P) {
         sensorTag.idx = sensorTags.length;
         sensorTags.push(sensorTag);
         //blink on discover
-        blinkLed(2, 1000);
+        blinkLed(10, 100);
     }
 
 });
 
 console.log('SCANNING....');
+blinkLed(1, 1000);
 noble.startScanning();
