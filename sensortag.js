@@ -4,9 +4,10 @@ var TIBase = ['f000', '04514000b000000000000000'],
     sensorTagAttributeTable = {
 
         //TYPE(hex string): [TYPE(text), DESCRIPTION]
+        "2A00": ['DeviceName', 'TI BLE Sensor Tag'],
         "2A23": ['System ID'],
-        "2A24": ['Model Number String', , '4E:2E:41:2E:00'],
-        "2A25": ['Serial Number String', , '4E:2E:41:2E:00 '],
+        "2A24": ['Model Number String', '4E:2E:41:2E:00'],
+        "2A25": ['Serial Number String','4E:2E:41:2E:00 '],
         "2A26": ['Firmware Revision String'],
         "2A27": ['Hardware Revision String'],
         "2A28": ['Software Revision String'],
