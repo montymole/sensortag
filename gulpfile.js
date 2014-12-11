@@ -1,7 +1,7 @@
 //load configurations
-var UGLIFY = false,
-    MINIFY_CSS = false,
-    ANONYMOUS_SCOPE = false,
+var UGLIFY = true,
+    MINIFY_CSS = true,
+    ANONYMOUS_SCOPE = true,
 
     // module requirements
     fs = require('fs'),

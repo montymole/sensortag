@@ -2,32 +2,46 @@
 
 {<bodyContent}
 
-	<div id="graph"></div>
-	<script type="text/javascript">
-	var model = {raw|s};
-	</script>
+<ul>
+	<li>Graphs</li>
+	<li>Data table</li>
+	<li>Controls</li>
+</ul>
 
-	<table>
+	<section>
 
-	<tr>
-		<th>ID</th>
-		<th>TIME</th>
-		<th>Readning</th>
-		<th>Value</th>
-	</tr>
+		<div id="graph"></div>
+		<script type="text/javascript">
+			var model = {raw|s};
+		</script>
 
-	{#IRTemperatureData}
+	</section>
 
-		<tr>
-			<td>{sensorTagId}</td>
-			<td>{{dateStr}</td>
-			<td>{cname}</td>
-			<td>{value.objectTemp}
+	<section>
+		<table class="sortable">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>TIME</th>
+				<th>Readning</th>
+				<th>Value</th>
+			</tr>
+			</thead>
+			<tbody>
+			{#IRTemperatureData}
 
-			</td>
+				<tr>
+					<td>{sensorTagId}</td>
+					<td>{{dateStr}</td>
+					<td>{cname}</td>
+					<td>{value.objectTemp}
 
-		</tr>
-	{/IRTemperatureData}
-	</table>
+					</td>
+
+				</tr>
+			{/IRTemperatureData}
+			</tbody>
+		</table>
+	</section>
 
 {/bodyContent}

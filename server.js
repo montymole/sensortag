@@ -31,7 +31,7 @@ app.get('/', function(req, res) {
     var now = new Date(),
         dstart = new Date();
 
-    dstart.setHours(now.getHours() - 10);
+    dstart.setHours(now.getHours() - 1000);
 
     readingsDateFromTo(dstart.getTime(), now.getTime(), function(readings) {
 
@@ -67,7 +67,7 @@ app.get('/ajax', function(req, res) {
     var now = new Date(),
         dstart = new Date();
 
-    dstart.setHours(now.getHours() - 100);
+    dstart.setHours(now.getHours() - 1000);
 
     readingsDateFromTo(dstart.getTime(), now.getTime(), function(readings) {
 
